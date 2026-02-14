@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beating Pixel Heart</title>
+
+<style>
+    body {
+        margin: 0;
+        background: radial-gradient(#000000, #1a0000);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .heart {
+        display: grid;
+        grid-template-columns: repeat(15, 12px);
+        grid-auto-rows: 12px;
+        gap: 3px;
+        transform-origin: center;
+    }
+
+    .pixel {
+        width: 12px;
+        height: 12px;
+        background-color: crimson;
+        opacity: 0;
+        border-radius: 2px;
+    }
+
+    .beat {
+        animation: beat 1s infinite ease-in-out;
+    }
+
+    @keyframes beat {
+        0%   { transform: scale(1); }
+        25%  { transform: scale(1.1); }
+        40%  { transform: scale(1); }
+        60%  { transform: scale(1.15); }
+        100% { transform: scale(1); }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="heart" id="heart"></div>
+
+<script>
+const heart = document.getElementById("heart");
+
+/* Pixel heart shape (1 = pixel, 0 = empty) */
+const shape = [
+  [0,0,1,1,0,0,0,0,0,1,1,0,0,0,0],
+  [0,1,1,1,1,0,0,0,1,1,1,1,0,0,0],
+  [1,1,1,1,1,1,0,1,1,1,1,1,1,0,0],
+  [1,1,1,1,1,1,1,1,1,1,1,1,1,0,0],
+  [0,1,1,1,1,1,1,1,1,1,1,1,0,0,0],
+  [0,0,1,1,1,1,1,1,1,1,1,0,0,0,0],
+  [0,0,0,1,1,1,1,1,1,1,0,0,0,0,0],
+  [0,0,0,0,1,1,1,1,1,0,0,0,0,0,0],
+  [0,0,0,0,0,1,1,1,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]
+];
+
+let delay = 0;
+
+/* Create pixels one by one */
+shape.forEach(row => {
+    row.forEach(cell => {
+        const pixel = document.createElement("div");
+
+        if (cell === 1) {
+            pixel.classList.add("pixel");
+
+            setTimeout(() => {
+                pixel.style.transition = "opacity 0.6s ease";
+                pixel.style.opacity = 1;
+            }, delay);
+
+            delay += 120; // Controls how slow pixels appear
+        }
+
+        heart.appendChild(pixel);
+    });
+});
+
+/* Start beating after fully visible */
+setTimeout(() => {
+    heart.classList.add("beat");
+}, delay + 500);
+
+</script>
+
+</body>
+</html>
